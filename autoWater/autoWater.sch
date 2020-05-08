@@ -1,0 +1,265 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MCU_Microchip_ATtiny:ATtiny13-20SSU U?
+U 1 1 5E6BD50E
+P 5200 3550
+F 0 "U?" H 4671 3596 50  0000 R CNN
+F 1 "ATtiny13-20SSU" H 4671 3505 50  0000 R CNN
+F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 5200 3550 50  0001 C CIN
+F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/doc2535.pdf" H 5200 3550 50  0001 C CNN
+	1    5200 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E6BD91D
+P 5200 4150
+F 0 "#PWR?" H 5200 3900 50  0001 C CNN
+F 1 "GND" H 5205 3977 50  0000 C CNN
+F 2 "" H 5200 4150 50  0001 C CNN
+F 3 "" H 5200 4150 50  0001 C CNN
+	1    5200 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_BJT:2N3904 Q?
+U 1 1 5E6BE8DA
+P 6850 3200
+F 0 "Q?" H 7040 3246 50  0000 L CNN
+F 1 "2N3904" H 7040 3155 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline" H 7050 3125 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 6850 3200 50  0001 L CNN
+	1    6850 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E6BECAC
+P 6500 3200
+F 0 "R?" V 6293 3200 50  0000 C CNN
+F 1 "220" V 6384 3200 50  0000 C CNN
+F 2 "" V 6430 3200 50  0001 C CNN
+F 3 "~" H 6500 3200 50  0001 C CNN
+	1    6500 3200
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6350 3200 6100 3200
+Wire Wire Line
+	6100 3200 6100 3550
+Wire Wire Line
+	6100 3550 5800 3550
+Text GLabel 5800 3650 2    50   Input ~ 0
+Sensor
+$Comp
+L Connector:Conn_01x03_Male J?
+U 1 1 5E6BFC4F
+P 7400 4200
+F 0 "J?" H 7550 3850 50  0000 R CNN
+F 1 "Soil Humidity Sensor" H 7800 3950 50  0000 R CNN
+F 2 "" H 7400 4200 50  0001 C CNN
+F 3 "~" H 7400 4200 50  0001 C CNN
+	1    7400 4200
+	-1   0    0    1   
+$EndComp
+Text Notes 7450 4100 0    50   ~ 0
+Vcc
+Text Notes 7450 4200 0    50   ~ 0
+Analog
+Text Notes 7450 4300 0    50   ~ 0
+GND
+$Comp
+L Connector:Conn_01x02_Female J?
+U 1 1 5E6C1DBD
+P 7150 2700
+F 0 "J?" H 7178 2676 50  0000 L CNN
+F 1 "Water Pump" H 7178 2585 50  0000 L CNN
+F 2 "" H 7150 2700 50  0001 C CNN
+F 3 "~" H 7150 2700 50  0001 C CNN
+	1    7150 2700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6950 3000 6950 2800
+$Comp
+L power:+5V #PWR?
+U 1 1 5E6C2908
+P 6950 2550
+F 0 "#PWR?" H 6950 2400 50  0001 C CNN
+F 1 "+5V" H 6965 2723 50  0000 C CNN
+F 2 "" H 6950 2550 50  0001 C CNN
+F 3 "" H 6950 2550 50  0001 C CNN
+	1    6950 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6950 2700 6950 2550
+$Comp
+L power:+5V #PWR?
+U 1 1 5E6C3E70
+P 6950 4000
+F 0 "#PWR?" H 6950 3850 50  0001 C CNN
+F 1 "+5V" H 6965 4173 50  0000 C CNN
+F 2 "" H 6950 4000 50  0001 C CNN
+F 3 "" H 6950 4000 50  0001 C CNN
+	1    6950 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7200 4100 6950 4100
+Wire Wire Line
+	6950 4100 6950 4000
+Text GLabel 7200 4200 0    50   Input ~ 0
+Sensor
+$Comp
+L power:GND #PWR?
+U 1 1 5E6C4765
+P 6950 4300
+F 0 "#PWR?" H 6950 4050 50  0001 C CNN
+F 1 "GND" H 6955 4127 50  0000 C CNN
+F 2 "" H 6950 4300 50  0001 C CNN
+F 3 "" H 6950 4300 50  0001 C CNN
+	1    6950 4300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7200 4300 6950 4300
+$Comp
+L power:GND #PWR?
+U 1 1 5E6C4D0D
+P 6950 3400
+F 0 "#PWR?" H 6950 3150 50  0001 C CNN
+F 1 "GND" H 6955 3227 50  0000 C CNN
+F 2 "" H 6950 3400 50  0001 C CNN
+F 3 "" H 6950 3400 50  0001 C CNN
+	1    6950 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E6C6C73
+P 5900 2850
+F 0 "R?" H 5970 2896 50  0000 L CNN
+F 1 "470" H 5970 2805 50  0000 L CNN
+F 2 "" V 5830 2850 50  0001 C CNN
+F 3 "~" H 5900 2850 50  0001 C CNN
+	1    5900 2850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5800 3250 5900 3250
+Wire Wire Line
+	5900 3250 5900 3000
+$Comp
+L Device:LED D?
+U 1 1 5E6C73B4
+P 5900 2450
+F 0 "D?" V 5847 2528 50  0000 L CNN
+F 1 "LED" V 5938 2528 50  0000 L CNN
+F 2 "" H 5900 2450 50  0001 C CNN
+F 3 "~" H 5900 2450 50  0001 C CNN
+	1    5900 2450
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5900 2700 5900 2600
+$Comp
+L power:GND #PWR?
+U 1 1 5E6C884A
+P 6050 2100
+F 0 "#PWR?" H 6050 1850 50  0001 C CNN
+F 1 "GND" H 6055 1927 50  0000 C CNN
+F 2 "" H 6050 2100 50  0001 C CNN
+F 3 "" H 6050 2100 50  0001 C CNN
+	1    6050 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5900 2300 5900 2050
+Wire Wire Line
+	5900 2050 6050 2050
+Wire Wire Line
+	6050 2050 6050 2100
+$Comp
+L power:+5V #PWR?
+U 1 1 5E6D03B7
+P 5200 2950
+F 0 "#PWR?" H 5200 2800 50  0001 C CNN
+F 1 "+5V" H 5215 3123 50  0000 C CNN
+F 2 "" H 5200 2950 50  0001 C CNN
+F 3 "" H 5200 2950 50  0001 C CNN
+	1    5200 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E6D19E0
+P 6500 3800
+F 0 "R?" H 6570 3846 50  0000 L CNN
+F 1 "47k" H 6570 3755 50  0000 L CNN
+F 2 "" V 6430 3800 50  0001 C CNN
+F 3 "~" H 6500 3800 50  0001 C CNN
+	1    6500 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E6D20DE
+P 6500 4200
+F 0 "R?" H 6570 4246 50  0000 L CNN
+F 1 "13k" H 6570 4155 50  0000 L CNN
+F 2 "" V 6430 4200 50  0001 C CNN
+F 3 "~" H 6500 4200 50  0001 C CNN
+	1    6500 4200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 4050 6500 4000
+Wire Wire Line
+	6500 4000 6300 4000
+Wire Wire Line
+	6300 4000 6300 3450
+Wire Wire Line
+	6300 3450 5800 3450
+Connection ~ 6500 4000
+Wire Wire Line
+	6500 4000 6500 3950
+$Comp
+L power:GND #PWR?
+U 1 1 5E6D2F58
+P 6500 4350
+F 0 "#PWR?" H 6500 4100 50  0001 C CNN
+F 1 "GND" H 6505 4177 50  0000 C CNN
+F 2 "" H 6500 4350 50  0001 C CNN
+F 3 "" H 6500 4350 50  0001 C CNN
+	1    6500 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5E6D3346
+P 6500 3650
+F 0 "#PWR?" H 6500 3500 50  0001 C CNN
+F 1 "+5V" H 6515 3823 50  0000 C CNN
+F 2 "" H 6500 3650 50  0001 C CNN
+F 3 "" H 6500 3650 50  0001 C CNN
+	1    6500 3650
+	1    0    0    -1  
+$EndComp
+NoConn ~ 5800 3750
+NoConn ~ 5800 3350
+$EndSCHEMATC
