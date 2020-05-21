@@ -391,4 +391,6 @@ Wire Wire Line
 	4950 1450 5050 1450
 Wire Wire Line
 	5050 1450 5050 1400
+Text Notes 7700 3850 0    50   ~ 0
+делитель для датчика почвы продумать
 $EndSCHEMATC
