@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source "D:\\Github repos\\automatic-watering\\KiCAD sch and PCB\\autoWater.sch")
-    (date "03.06.2020 12:17:18")
+    (date "03.06.2020 18:28:03")
     (tool "Eeschema (5.1.6)-1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -44,7 +44,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5E6C73B4))
     (comp (ref R6)
-      (value 470k)
+      (value 680k)
       (footprint Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder)
       (datasheet ~)
       (libsource (lib Device) (part R) (description Resistor))
@@ -58,7 +58,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 5E6D20DE))
     (comp (ref R2)
-      (value 4.7k)
+      (value 6.8k)
       (footprint Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P15.24mm_Horizontal)
       (datasheet ~)
       (libsource (lib Device) (part R) (description Resistor))
