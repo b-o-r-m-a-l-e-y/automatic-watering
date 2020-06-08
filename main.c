@@ -1,6 +1,7 @@
-#define __AVR_ATtiny13__
+#define __AVR_ATtiny13A__
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/sleep.h>
 
 //Freq CPUio 9.6 MHz/8=1.2MHz
 
@@ -17,15 +18,11 @@
 #define WATER_PUMP_TIME_MAX     4000 //How much time water pump os on
 
 uint8_t waterPumpFlag = 0;
+uint8_t goToSleepFlag = 0;
 volatile uint16_t msCounter = 0;
 volatile uint16_t waterPumpTime = 0;
 
-void waterPumpTimerService()
-{
-
-}
-
-void configuration()
+inline void configuration()
 {
     cli();
     DDRB = (1<<PIN0)|(1<<PIN1)|(1<<PIN3);
@@ -52,7 +49,9 @@ void configuration()
     TCCR0B=(1<<CS02);
     TCNT0=0;
     OCR0A=47;
-    
+
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+
     sei();
 }
 
@@ -64,7 +63,7 @@ uint16_t getADCResult(uint8_t mask)
     while (!(ADCSRA & 1<<ADIF)); //Wait util conversion complete
     ADCSRA &= ~(1<<ADIF);
     uint16_t data = 0;
-    data = (ADCH<<8)|ADCL;
+    data = (ADCH<<8)| ADCL;
     return data;
 }
 
@@ -94,18 +93,34 @@ int main()
         batteryCheck();
         if(waterPumpFlag)
         {
-            PORTB |=(1<<PORTB3);
-        }        
+            PORTB |= (1<<PORTB3);
+            if(waterPumpTime>=WATER_PUMP_TIME_MAX)
+            {
+                waterPumpFlag=0;
+                waterPumpTime=0;
+                goToSleepFlag=1;
+            }
+        }
+        if(goToSleepFlag) 
+        {
+            cli();
+            sleep_enable();
+            sleep_bod_disable();
+            sei();
+            sleep_cpu();
+            sleep_enable();
+        }  
     }
     return 0;
 }
 
 ISR(TIM0_COMPA_vect)
 {
+    cli();
     msCounter++;
     if(waterPumpFlag)
     {
         waterPumpTime++;
     }
-    if(waterPumpTime>=WATER_PUMP_TIME_MAX) waterPumpFlag=0;
+    sei();
 }
