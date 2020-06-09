@@ -675,4 +675,10 @@ $EndComp
 Wire Wire Line
 	900  1550 1000 1550
 Connection ~ 1000 1550
+Text Notes 5300 4450 0    50   ~ 0
+SCK\n
+Text Notes 5250 4550 0    50   ~ 0
+MOSI
+Text Notes 5250 4650 0    50   ~ 0
+MISO
 $EndSCHEMATC
