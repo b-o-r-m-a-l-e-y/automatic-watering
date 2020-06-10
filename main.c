@@ -13,14 +13,18 @@
 //Resistor divider Up = 680k and Down = 150k
 #define ADC_MAX 1024
 #define BATTERY_LOW_LIMIT       768 //The lowest voltage for battery = 3.4 Volts
-#define SOIL_LOW_LIMIT          800 //The lower, the more dusty soil is
+#define SOIL_LOW_LIMIT          300 //The lower, the more dusty soil is
 
 #define WATER_PUMP_TIME_MAX     4000 //How much time water pump os on
+
+#define UPDATE_TIME             8/8 //In seconds. Should be divided by 8
 
 uint8_t waterPumpFlag = 0;
 uint8_t goToSleepFlag = 0;
 volatile uint16_t msCounter = 0;
 volatile uint16_t waterPumpTime = 0;
+
+uint8_t volatile WDT8msCounter = 0; // Varible will be incremented in WDG timer
 
 inline void configuration()
 {
@@ -77,12 +81,16 @@ void batteryCheck()
     if (batVoltage<BATTERY_LOW_LIMIT) PORTB |= (1<<PORTB0);
     else PORTB &= (~1<<PORTB0);
 }
-
+/*
+ * Check voltage on resistor divider
+ */
 void soilSensorCheck()
 {
+    PORTB |= (1<<PORTB1); //Open transistor for sensor
     uint16_t soilVoltage = 1024;
     soilVoltage = getADCResult(SENSOR_MASK);
     if (soilVoltage<SOIL_LOW_LIMIT) waterPumpFlag=1;
+    PORTB &= ~(1<<PORTB1); //Close transistor
 }
 
 int main()
@@ -90,26 +98,36 @@ int main()
     configuration();
     while(1)
     {
-        batteryCheck();
+        if (WDT8msCounter>UPDATE_TIME)
+        {
+            batteryCheck();
+            soilSensorCheck();
+            cli();
+            WDT8msCounter=0;
+            sei();
+        }
         if(waterPumpFlag)
         {
-            PORTB |= (1<<PORTB3);
+            PORTB |= (1<<PORTB3); //Turn on water pump
             if(waterPumpTime>=WATER_PUMP_TIME_MAX)
             {
+                PORTB &= !(1<<PORTB3);
+                cli();
                 waterPumpFlag=0;
                 waterPumpTime=0;
                 goToSleepFlag=1;
+                sei();
             }
         }
+        else goToSleepFlag = 1;
         if(goToSleepFlag) 
         {
             cli();
             sleep_enable();
-            sleep_bod_disable();
             sei();
             sleep_cpu();
-            sleep_enable();
-        }  
+            goToSleepFlag = 0;
+        }
     }
     return 0;
 }
@@ -117,10 +135,12 @@ int main()
 ISR(TIM0_COMPA_vect)
 {
     cli();
-    msCounter++;
-    if(waterPumpFlag)
-    {
-        waterPumpTime++;
-    }
+    if(waterPumpFlag) waterPumpTime++;
+    else waterPumpTime = 0;
     sei();
+}
+
+ISR(WDT_vect)
+{
+    WDT8msCounter++;
 }

@@ -1,6 +1,6 @@
 MCU_PROGRAMMER = t13
 PROGRAMMER_TYPE = usbasp 
-PROGRAMMER_PORT = /dev/ttyUSB0
+PROGRAMMER_PORT = 
 
 PRG            = auto-water
 OBJ            = main.o
@@ -146,7 +146,7 @@ pdf: $(PRG).pdf
 	$(FIG2DEV) -L png $< $@
 
 program: hex
-	avrdude -V -p $(MCU_PROGRAMMER) -c $(PROGRAMMER_TYPE) -P $(PROGRAMMER_PORT) -U flash:w:$(PRG).hex
+	avrdude -V -p $(MCU_PROGRAMMER) -c $(PROGRAMMER_TYPE) -U flash:w:$(PRG).hex
 #	avrdude -V -p $(MCU_PROGRAMMER) -c avrisp2 -P usb -U flash:w:$(PRG).hex
 
 read: 
