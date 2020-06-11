@@ -14,8 +14,8 @@
 //Freq CPUio 9.6 MHz/8=1.2MHz
 
 //Resistor divider Up = 680k and Down = 200k
-#define BATTERY_LOW_LIMIT       768 //The lowest voltage for battery = 3.4 Volts
-#define SOIL_LOW_LIMIT          800 //The lower, the more dusty soil is
+#define BATTERY_LOW_LIMIT       130 //The lowest voltage for battery = 3.4 Volts
+#define SOIL_LOW_LIMIT          120 //The lower, the more dusty soil is
 
 #define WATER_PUMP_TIME_MAX     1000 //How much time water pump os on in milliseconds
 
@@ -52,10 +52,13 @@ inline void configuration()
     WDTCR |= (1<<WDTIE);
     WDTCR &= ~(1<<WDE);
 
-    //ADC internal reference, right adjust PB2 (soil sensor)
-    ADMUX = (1<<REFS0)|(0<<ADLAR)|(0<<MUX1)|(1<<MUX0);
+    //Disable digital input for PB2 and 4
+    DIDR0 |= (1<<ADC2D)|(1<<ADC1D);
     //Enable ADC, Prescaler 128
-    ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+    ADCSRA = (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+    //ADC internal reference, right adjust PB2 (soil sensor)
+    ADMUX = (1<<REFS0)|(1<<ADLAR)|(0<<MUX1)|(1<<MUX0);
+    ADCSRA = (1<<ADEN);
 
     //Timer for 1 ms CTC Mode
     //Enable interrupt on Output Compare Match A
@@ -85,9 +88,10 @@ uint16_t getADCResult()
 {
     //Start convertion
     ADCSRA |= (1<<ADSC);
-    while (ADCSRA & 1<<ADSC) {blink(1);} //Wait util conversion is complete
+    while (ADCSRA & 1<<ADSC) {} //Wait util conversion is complete
     uint16_t data = 0;
-    data = (ADCH<<8)| ADCL;
+    //data = (ADCH<<8)| ADCL;
+    data = ADCH;
     return data;
 }
 
@@ -116,7 +120,7 @@ void soilSensorCheck()
     ADMUX |= (1<<MUX1);
     ADMUX &= ~(1<<MUX0);
     soilVoltage = getADCResult();
-    if (soilVoltage>SOIL_LOW_LIMIT) 
+    if (soilVoltage<SOIL_LOW_LIMIT) 
     {
         waterPumpFlag=1;
         blink(2);
@@ -157,8 +161,10 @@ int main()
             DEBUG_LED_ON;
             cli();
             sleep_enable();
+            ADCSRA &= ~(1<<ADEN);
             sei();
             sleep_cpu();
+            ADCSRA |= (1<<ADEN);
             goToSleepFlag = 0;
             DEBUG_LED_OFF;
         }
