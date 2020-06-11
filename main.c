@@ -14,8 +14,8 @@
 //Freq CPUio 9.6 MHz/8=1.2MHz
 
 //Resistor divider Up = 680k and Down = 200k
-#define BATTERY_LOW_LIMIT       130 //The lowest voltage for battery = 3.4 Volts
-#define SOIL_LOW_LIMIT          120 //The lower, the more dusty soil is
+#define BATTERY_LOW_LIMIT       140 //The lowest voltage for battery = 3.4 Volts
+#define SOIL_LOW_LIMIT          85 //The lower, the more dusty soil is (120 for 5V)
 
 #define WATER_PUMP_TIME_MAX     1000 //How much time water pump os on in milliseconds
 
@@ -29,12 +29,7 @@ uint8_t volatile WDT8sCounter = 0; // Varible will be incremented in WDG timer
 
 #define DEBUG_LED_ON        PORTB |= (1<<PORTB0)
 #define DEBUG_LED_OFF       PORTB &= ~(1<<PORTB0)
-
-void toggleDebugLED()
-{
-    if (PORTB & 1<<PORTB0) PORTB &= ~(1<<PORTB0);
-    else PORTB |= 1<<PORTB0;
-}
+#define DEBUG_LED_TOGGGLE   PORTB ^= (1<<PORTB0)
 
 inline void configuration()
 {
@@ -90,7 +85,6 @@ uint16_t getADCResult()
     ADCSRA |= (1<<ADSC);
     while (ADCSRA & 1<<ADSC) {} //Wait util conversion is complete
     uint16_t data = 0;
-    //data = (ADCH<<8)| ADCL;
     data = ADCH;
     return data;
 }
@@ -105,9 +99,9 @@ void batteryCheck()
     ADMUX &= ~(1<<MUX1);
     batVoltage = getADCResult();
     //Debug LED LOL
-    /*
-    if (batVoltage<BATTERY_LOW_LIMIT) PORTB |= (1<<PORTB0);
-    else PORTB &= (~1<<PORTB0);*/ 
+    
+    if (batVoltage<BATTERY_LOW_LIMIT) blink(2);
+    else PORTB &= (~1<<PORTB0);
 }
 
 /*
@@ -123,10 +117,10 @@ void soilSensorCheck()
     if (soilVoltage<SOIL_LOW_LIMIT) 
     {
         waterPumpFlag=1;
-        blink(2);
+        blink(3);
     }
     else blink(1);
-    //PORTB &= ~(1<<PORTB1); //Close transistor
+    PORTB &= ~(1<<PORTB1); //Close transistor
 }
 
 int main()
@@ -158,7 +152,7 @@ int main()
         else goToSleepFlag = 1;
         if(goToSleepFlag) 
         {
-            DEBUG_LED_ON;
+            //DEBUG_LED_ON;
             cli();
             sleep_enable();
             ADCSRA &= ~(1<<ADEN);
@@ -166,7 +160,7 @@ int main()
             sleep_cpu();
             ADCSRA |= (1<<ADEN);
             goToSleepFlag = 0;
-            DEBUG_LED_OFF;
+            //DEBUG_LED_OFF;
         }
     }
     return 0;
