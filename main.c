@@ -116,7 +116,6 @@ void soilSensorCheck()
     if (soilVoltage<SOIL_LOW_LIMIT) 
     {
         waterPumpFlag=1;
-        blink(3);
     }
     else blink(1);
     PORTB &= ~(1<<PORTB1); //Close transistor
@@ -131,6 +130,7 @@ int main()
         {
             batteryCheck();
             soilSensorCheck();
+            blink(1);
             cli();
             WDT8sCounter=0;
             sei();
