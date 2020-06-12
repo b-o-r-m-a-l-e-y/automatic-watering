@@ -17,9 +17,9 @@
 #define BATTERY_LOW_LIMIT       140 //The lowest voltage for battery = 3.4 Volts
 #define SOIL_LOW_LIMIT          85 //The lower, the more dusty soil is (120 for 5V)
 
-#define WATER_PUMP_TIME_MAX     1000 //How much time water pump os on in milliseconds
+#define WATER_PUMP_TIME_MAX     3000 //How much time water pump os on in milliseconds
 
-#define UPDATE_TIME             3 //In seconds*8. Should be divided by 8
+#define UPDATE_TIME             5 //In seconds*8
 
 uint8_t waterPumpFlag = 0;
 uint8_t goToSleepFlag = 0;
@@ -41,8 +41,7 @@ inline void configuration()
     MCUSR &= ~(1<<WDRF);
     WDTCR = (1<<WDCE);
     //Watchdog interrupt each 8s
-    //WDTCR |= (1<<WDP3)|(0<<WDP2)|(0<<WDP1)|(1<<WDP0);
-    WDTCR |= (0<<WDP3)|(1<<WDP2)|(1<<WDP1)|(0<<WDP0); //1 ms for debug
+    WDTCR |= (1<<WDP3)|(0<<WDP2)|(0<<WDP1)|(1<<WDP0);
     //Enable WD interrupt
     WDTCR |= (1<<WDTIE);
     WDTCR &= ~(1<<WDE);

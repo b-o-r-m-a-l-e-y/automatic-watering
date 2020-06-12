@@ -316,8 +316,6 @@ F 3 "" H 4800 2750 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	4800 2450 5200 2450
-Text Notes 6950 2000 0    50   ~ 0
-Необходимо проверить\nсоответствие выводов
 $Comp
 L Connector:Conn_01x02_Male J1
 U 1 1 5EBF1F4E
