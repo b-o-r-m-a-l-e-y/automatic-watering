@@ -15,17 +15,17 @@
 
 //Resistor divider Up = 680k and Down = 200k
 #define BATTERY_LOW_LIMIT       140 //The lowest voltage for battery = 3.4 Volts
-#define SOIL_LOW_LIMIT          85 //The lower, the more dusty soil is (120 for 5V)
+#define SOIL_LOW_LIMIT          105 //The lower, the more dusty soil is (120 for 5V)
 
-#define WATER_PUMP_TIME_MAX     3000 //How much time water pump os on in milliseconds
+#define WATER_PUMP_TIME_MAX     8000 //How much time water pump os on in milliseconds
 
-#define UPDATE_TIME             5 //In seconds*8
+#define UPDATE_TIME             3*60*60/8 //Once in 3 hours
 
 uint8_t waterPumpFlag = 0;
 uint8_t goToSleepFlag = 0;
 volatile uint16_t waterPumpTime = 0;
 
-uint8_t volatile WDT8sCounter = 0; // Varible will be incremented in WDG timer
+uint16_t volatile WDT8sCounter = 1; // Varible will be incremented in WDG timer
 
 #define DEBUG_LED_ON        PORTB |= (1<<PORTB0)
 #define DEBUG_LED_OFF       PORTB &= ~(1<<PORTB0)
@@ -124,6 +124,18 @@ void soilSensorCheck()
 int main()
 {
     configuration();
+    PORTB |= (1<<PORTB1); //Open transistor for sensor
+    uint16_t soilVoltage = 0;
+    ADMUX |= (1<<MUX1);
+    ADMUX &= ~(1<<MUX0);
+    soilVoltage = getADCResult();
+    while(soilVoltage<SOIL_LOW_LIMIT)
+    {
+        soilVoltage = getADCResult();
+        PORTB |= (1<<PORTB3); //Turn on water pump
+    }
+    PORTB &= ~(1<<PORTB3); //Turn off water pump
+    PORTB &= ~(1<<PORTB1); //Close sensor transistor
     while(1)
     {
         if (WDT8sCounter>UPDATE_TIME)
@@ -138,7 +150,7 @@ int main()
         if(waterPumpFlag)
         {
             PORTB |= (1<<PORTB3); //Turn on water pump
-            if(waterPumpTime>=WATER_PUMP_TIME_MAX)
+            if(waterPumpTime>WATER_PUMP_TIME_MAX)
             {
                 PORTB &= !(1<<PORTB3);
                 cli();
@@ -158,6 +170,7 @@ int main()
             sei();
             sleep_cpu();
             ADCSRA |= (1<<ADEN);
+            waterPumpTime = 0;
             goToSleepFlag = 0;
             //DEBUG_LED_OFF;
         }
